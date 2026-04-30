@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout — ShopTech{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-7">
+        <h2 class="mb-4">Checkout</h2>
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h5 class="mb-3">Shipping Information</h5>
+                <form method="POST" action="{% url 'place_order' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Delivery Address</label>
+                        <textarea name="address" class="form-control" rows="3"
+                            placeholder="Enter your full delivery address"
+                            required></textarea>
+                    </div>
+                    <hr>
+                    <h5 class="mb-3">Order Summary</h5>
+                    {% for item in cart.items.all %}
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>{{ item.product.name }} x {{ item.quantity }}</span>
+                        <span>GHS {{ item.get_subtotal }}</span>
+                    </div>
+                    {% endfor %}
+                    <hr>
+                    <div class="d-flex justify-content-between fw-bold">
+                        <span>Total</span>
+                        <span class="text-success">GHS {{ cart.get_total }}</span>
+                    </div>
+                    <button type="submit" class="btn btn-dark w-100 mt-4">
+                        Place Order
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ShopTech{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">🛒 ShopTech</a>
+            <div class="ms-auto d-flex gap-2 align-items-center">
+                {% if user.is_authenticated %}
+                <span class="text-light">Hi, {{ user.username }}!</span>
+                 <a href="{% url 'order_list' %}" class="btn btn-outline-light btn-sm">My Orders</a>
+                <a href="{% url 'cart_detail' %}" class="btn btn-outline-light btn-sm">
+                    🛒 Cart
+                    {% if user.cart.items.count > 0 %}
+                    <span class="badge bg-danger">{{ user.cart.get_total_items }}</span>
+                    {% endif %}
+                </a>
+                <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">Logout</a>
+                {% else %}
+                <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm">Login</a>
+                <a href="{% url 'register' %}" class="btn btn-light btn-sm">Register</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

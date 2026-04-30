@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}My Cart — ShopTech{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">🛒 My Cart</h2>
+
+{% if cart.items.all %}
+<div class="row">
+    <div class="col-md-8">
+        {% for item in cart.items.all %}
+        <div class="card mb-3 shadow-sm">
+            <div class="card-body">
+                <div class="row align-items-center">
+
+                    <!-- Product Image -->
+                    <div class="col-md-2">
+                        {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}"
+                            class="img-fluid rounded" alt="{{ item.product.name }}">
+                        {% else %}
+                        <div class="bg-secondary rounded" style="height: 60px;"></div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Product Info -->
+                    <div class="col-md-4">
+                        <h6 class="mb-0">{{ item.product.name }}</h6>
+                        <small class="text-muted">GHS {{ item.product.price }}</small>
+                    </div>
+
+                    <!-- Quantity Update -->
+                    <div class="col-md-3">
+                        <form method="POST" action="{% url 'update_cart' item.id %}">
+                            {% csrf_token %}
+                            <div class="input-group input-group-sm">
+                                <input type="number" name="quantity"
+                                    value="{{ item.quantity }}"
+                                    min="1" class="form-control">
+                                <button type="submit" class="btn btn-outline-dark">
+                                    Update
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Subtotal -->
+                    <div class="col-md-2 text-end">
+                        <strong class="text-success">GHS {{ item.get_subtotal }}</strong>
+                    </div>
+
+                    <!-- Remove -->
+                    <div class="col-md-1 text-end">
+                        <a href="{% url 'remove_from_cart' item.id %}"
+                            class="btn btn-sm btn-outline-danger">✕</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Order Summary -->
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Order Summary</h5>
+                <hr>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Items ({{ cart.get_total_items }})</span>
+                    <span>GHS {{ cart.get_total }}</span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between fw-bold">
+                    <span>Total</span>
+                    <span class="text-success">GHS {{ cart.get_total }}</span>
+                </div>
+                <a href="{% url 'checkout' %}" class="btn btn-dark w-100 mt-3">Proceed to Checkout</a>
+                <a href="{% url 'product_list' %}"
+                    class="btn btn-outline-dark w-100 mt-2">
+                    Continue Shopping
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<div class="text-center py-5">
+    <h4 class="text-muted">Your cart is empty</h4>
+    <a href="{% url 'product_list' %}" class="btn btn-dark mt-3">
+        Start Shopping
+    </a>
+</div>
+{% endif %}
+{% endblock %}

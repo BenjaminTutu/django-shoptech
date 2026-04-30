@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}My Orders — ShopTech{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">My Orders</h2>
+
+{% if orders %}
+{% for order in orders %}
+<div class="card mb-3 shadow-sm">
+    <div class="card-body">
+        <div class="row align-items-center">
+            <div class="col-md-3">
+                <h6 class="mb-0">Order #{{ order.id }}</h6>
+                <small class="text-muted">{{ order.created_at|date:"M d, Y" }}</small>
+            </div>
+            <div class="col-md-3">
+                {% if order.status == 'Delivered' %}
+                <span class="badge bg-success">{{ order.status }}</span>
+                {% elif order.status == 'Cancelled' %}
+                <span class="badge bg-danger">{{ order.status }}</span>
+                {% elif order.status == 'Shipped' %}
+                <span class="badge bg-info">{{ order.status }}</span>
+                {% elif order.status == 'Processing' %}
+                <span class="badge bg-warning text-dark">{{ order.status }}</span>
+                {% elif order.status == 'Paid' %}
+                <span class="badge bg-primary">{{ order.status }}</span>
+                {% else %}
+                <span class="badge bg-secondary">{{ order.status }}</span>
+                {% endif %}
+            </div>
+            <div class="col-md-3">
+                <strong class="text-success">GHS {{ order.total_price }}</strong>
+            </div>
+            <div class="col-md-3 text-end">
+                <a href="{% url 'order_detail' order.id %}" class="btn btn-dark btn-sm">View Details</a>
+                {% if order.status == 'Pending' %}
+                <a href="{% url 'pay' order.id %}" class="btn btn-success btn-sm">Pay Now</a>
+                <a href="{% url 'cancel_order' order.id %}" class="btn btn-outline-danger btn-sm">Cancel</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% else %}
+<div class="text-center py-5">
+    <h4 class="text-muted">No orders yet</h4>
+    <a href="{% url 'product_list' %}" class="btn btn-dark mt-3">Start Shopping</a>
+</div>
+{% endif %}
+{% endblock %}

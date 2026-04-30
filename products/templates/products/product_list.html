@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}ShopTech — Phones, Laptops & Accessories{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<div class="p-5 mb-4 bg-dark text-white rounded-3">
+    <div class="container-fluid py-3">
+        <h1 class="display-5 fw-bold">🛒 ShopTech</h1>
+        <p class="col-md-8 fs-4">Your one-stop shop for phones, laptops and accessories in Ghana.</p>
+    </div>
+</div>
+
+<!-- Categories -->
+<div class="mb-4">
+    <a href="{% url 'product_list' %}"
+        class="btn btn-sm me-2 {% if not current_category %}btn-dark{% else %}btn-outline-dark{% endif %}">
+        All
+    </a>
+    {% for category in categories %}
+    <a href="{% url 'category_products' category.slug %}"
+        class="btn btn-sm me-2 {% if current_category.slug == category.slug %}btn-dark{% else %}btn-outline-dark{% endif %}">
+        {{ category.name }}
+    </a>
+    {% endfor %}
+</div>
+
+<!-- Products Grid -->
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for product in products %}
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" class="card-img-top"
+                style="height: 200px; object-fit: cover;" alt="{{ product.name }}">
+            {% else %}
+            <div class="bg-secondary text-white d-flex align-items-center justify-content-center"
+                style="height: 200px;">
+                <span>No Image</span>
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text text-muted small">{{ product.description|truncatewords:15 }}</p>
+                <p class="fw-bold text-success">GHS {{ product.price }}</p>
+                {% if product.is_in_stock %}
+                <span class="badge bg-success mb-2">In Stock</span>
+                {% else %}
+                <span class="badge bg-danger mb-2">Out of Stock</span>
+                {% endif %}
+            </div>
+            <div class="card-footer bg-white">
+                <a href="{% url 'product_detail' product.slug %}"
+                    class="btn btn-dark w-100">View Product</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-muted">No products found.</p>
+    {% endfor %}
+</div>
+{% endblock %}
