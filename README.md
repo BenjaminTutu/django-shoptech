@@ -179,61 +179,7 @@ python manage.py migrate && python manage.py collectstatic --noinput && python m
 
 ---
 
-## Project Structure
-
-```
-django-shoptech/
-├── shoptech/                   # Project settings
-│   ├── settings.py
-│   ├── urls.py
-│   └── wsgi.py
-├── products/                   # Products app
-│   ├── models.py               # Product, Category, Review, Wishlist
-│   ├── views.py                # Product list, detail, reviews, wishlist
-│   ├── urls.py
-│   ├── admin.py                # Low stock warning admin
-│   └── templates/
-│       └── products/
-│           ├── product_list.html
-│           ├── product_detail.html
-│           └── wishlist.html
-├── cart/                       # Cart app
-│   ├── models.py               # Cart, CartItem
-│   ├── views.py                # Add, remove, update cart
-│   ├── urls.py
-│   └── templates/
-│       └── cart/
-│           └── cart.html
-├── orders/                     # Orders app
-│   ├── models.py               # Order, OrderItem, Coupon
-│   ├── views.py                # Checkout, place order, Paystack payment
-│   ├── urls.py
-│   ├── admin.py                # Order & coupon management
-│   └── templates/
-│       └── orders/
-│           ├── checkout.html
-│           ├── order_list.html
-│           └── order_detail.html
-├── accounts/                   # Authentication app
-│   ├── models.py               # Custom User model
-│   ├── views.py                # Register, login, logout
-│   ├── forms.py                # Registration form
-│   ├── urls.py
-│   └── templates/
-│       └── accounts/
-│           ├── register.html
-│           └── login.html
-├── templates/
-│   └── base.html               # Base template with navbar
-├── manage.py
-├── requirements.txt
-├── Procfile
-└── .env                        # Environment variables (not committed)
-```
-
----
-
-## Order Status Flow
+# Order Status Flow
 
 ```
 Pending → Paid → Processing → Shipped → Delivered
