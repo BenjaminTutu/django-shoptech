@@ -1,5 +1,9 @@
 from django.db import models
 from django.utils.text import slugify
+from django.core.validators import MinValueValidator, MaxValueValidator
+
+from accounts.models import User
+
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -32,3 +36,28 @@ class Product(models.Model):
 
     def is_in_stock(self):
         return self.stock > 0
+
+
+class Review(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ['product', 'user']
+
+    def __str__(self):
+        return f"{self.user.username} — {self.product.name} ({self.rating}★)"
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='wishlist')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ['user', 'product']
+
+    def __str__(self):
+        return f"{self.user.username} — {self.product.name}"

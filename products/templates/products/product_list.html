@@ -5,10 +5,13 @@
 {% block content %}
 
 <!-- Hero Section -->
-<div class="p-5 mb-4 bg-dark text-white rounded-3">
-    <div class="container-fluid py-3">
-        <h1 class="display-5 fw-bold">🛒 ShopTech</h1>
-        <p class="col-md-8 fs-4">Your one-stop shop for phones, laptops and accessories in Ghana.</p>
+<div class="jumbotron p-5 mb-4 bg-light rounded-3" style="background: url(/media/images/bg-imgs/laptop.jpg) no-repeat center center; 
+background-size: cover; position: relative; background-color: linear-gradient(rgba(0, 0, 0, 0.934)); color: white;">
+    <div class="container py-5">
+        <h1 class="display-4 fw-bold">Welcome to <span class="text-success">🛒 ShopTech!</span></h1>
+        <p class="lead">Your one-stop shop for the latest phones, laptops, and accessories.</p>
+        <hr style="height: 5px; background-color: white; width: 15%;">
+        <a href="{% url 'product_list' %}" class="btn btn-success btn-lg">Shop Now</a>
     </div>
 </div>
 
@@ -32,8 +35,8 @@
     <div class="col">
         <div class="card h-100 shadow-sm">
             {% if product.image %}
-            <img src="{{ product.image.url }}" class="card-img-top"
-                style="height: 200px; object-fit: cover;" alt="{{ product.name }}">
+            <img src="{{ product.image.url }}" class="card-img-top" style="height: 200px; object-fit: cover;"
+                alt="{{ product.name }}">
             {% else %}
             <div class="bg-secondary text-white d-flex align-items-center justify-content-center"
                 style="height: 200px;">
@@ -42,7 +45,7 @@
             {% endif %}
             <div class="card-body">
                 <h5 class="card-title">{{ product.name }}</h5>
-                <p class="card-text text-muted small">{{ product.description|truncatewords:15 }}</p>
+                <!-- <p class="card-text text-muted small">{{ product.description|truncatewords:15 }}</p> -->
                 <p class="fw-bold text-success">GHS {{ product.price }}</p>
                 {% if product.is_in_stock %}
                 <span class="badge bg-success mb-2">In Stock</span>
@@ -51,8 +54,7 @@
                 {% endif %}
             </div>
             <div class="card-footer bg-white">
-                <a href="{% url 'product_detail' product.slug %}"
-                    class="btn btn-dark w-100">View Product</a>
+                <a href="{% url 'product_detail' product.slug %}" class="btn btn-dark w-100">View Product</a>
             </div>
         </div>
     </div>
@@ -60,4 +62,5 @@
     <p class="text-muted">No products found.</p>
     {% endfor %}
 </div>
+
 {% endblock %}

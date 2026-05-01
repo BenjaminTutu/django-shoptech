@@ -30,7 +30,7 @@
                 {% endif %}
             </div>
             <div class="col-md-3">
-                <strong class="text-success">GHS {{ order.total_price }}</strong>
+                <strong class="text-success">GHS {{ order.get_final_total }}</strong>
             </div>
             <div class="col-md-3 text-end">
                 <a href="{% url 'order_detail' order.id %}" class="btn btn-dark btn-sm">View Details</a>

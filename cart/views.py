@@ -4,14 +4,19 @@ from django.contrib import messages
 from .models import Cart, CartItem
 from products.models import Product
 
-# @login_required
+@login_required
 def cart_detail(request):
     cart, created = Cart.objects.get_or_create(user=request.user)
     return render(request, 'cart/cart.html', {'cart': cart})
 
-# @login_required
+@login_required
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
+
+    if not request.user.is_authenticated:
+        messages.warning(request, 'Please login to add item')
+        return redirect('login')
+
     cart, created = Cart.objects.get_or_create(user=request.user)
     cart_item, item_created = CartItem.objects.get_or_create(
         cart=cart,
@@ -23,14 +28,20 @@ def add_to_cart(request, product_id):
     messages.success(request, f'{product.name} added to cart!')
     return redirect('cart_detail')
 
-# @login_required
+@login_required
 def remove_from_cart(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
     cart_item.delete()
+
+    # clear coupon if cart is empty
+    if not cart_item.cart.items.exists():
+        if 'coupon_code' in request.session:
+            del request.session['coupon_code']
+
     messages.success(request, 'Item removed from cart!')
     return redirect('cart_detail')
 
-# @login_required
+@login_required
 def update_cart(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
     quantity = int(request.POST.get('quantity', 1))

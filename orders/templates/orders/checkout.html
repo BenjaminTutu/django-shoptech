@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-md-7">
+    <div class="col-md-8">
         <h2 class="mb-4">Checkout</h2>
         <div class="card shadow-sm">
             <div class="card-body p-4">
@@ -14,8 +14,7 @@
                     <div class="mb-3">
                         <label class="form-label fw-bold">Delivery Address</label>
                         <textarea name="address" class="form-control" rows="3"
-                            placeholder="Enter your full delivery address"
-                            required></textarea>
+                            placeholder="Enter your full delivery address" required></textarea>
                     </div>
                     <hr>
                     <h5 class="mb-3">Order Summary</h5>
@@ -26,10 +25,14 @@
                     </div>
                     {% endfor %}
                     <hr>
+                    {% if request.session.coupon_code %}
                     <div class="d-flex justify-content-between fw-bold">
                         <span>Total</span>
-                        <span class="text-success">GHS {{ cart.get_total }}</span>
+                        {% if coupon %}
+                        <strike><span class="text-muted">GHS {{ cart.get_total }}</span></strike>
+                        {% endif %}
                     </div>
+                    {% endif %}
                     <button type="submit" class="btn btn-dark w-100 mt-4">
                         Place Order
                     </button>
@@ -37,5 +40,37 @@
             </div>
         </div>
     </div>
+    <!-- Coupon Section -->
+        <div class="col-md-4 position-sticky" style="top: 20px; background-color: #dee1e4; padding: 20px; border-radius: 5px;">
+            <div class="mb-3">
+                <label class="form-label fw-bold">Have a coupon?</label>
+                <div class="input-group">
+                    <form method="POST" action="{% url 'apply_coupon' %}" class="d-flex w-100">
+                        {% csrf_token %}
+                        <input type="text" name="code" class="form-control" placeholder="Enter coupon code">
+                        <button type="submit" class="btn btn-outline-dark ms-2">Apply</button>
+                    </form>
+                </div>
+            </div>
+
+        
+            <div class="d-flex justify-content-between mb-2">
+                <span>Subtotal</span>
+               <span>GHS {{ cart.get_total }}</span>
+            </div>
+           
+            {% if request.session.coupon_code%}
+            <div class="d-flex justify-content-between mb-2 text-success">
+                <span>Discount</span>
+                <span style="color: red;"> <strong >{{coupon.discount_percent }}% </strong>applied ✅</span>
+            </div>
+            <hr>
+            {% endif %}
+            <div class="d-flex justify-content-between fw-bold">
+                <span>Total after discount</span>
+                <strong class="text-success">GHS {{ final_total }}</strong>
+            </div>
+          
+        </div>
 </div>
 {% endblock %}
