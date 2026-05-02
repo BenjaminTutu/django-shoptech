@@ -5,11 +5,12 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supabase-336791?logo=postgresql)
 ![Deployed](https://img.shields.io/badge/Deployed-Render-46E3B7?logo=render)
 ![Paystack](https://img.shields.io/badge/Payments-Paystack-00C3F7)
+![Cloudinary](https://img.shields.io/badge/Media-Cloudinary-3448C5?logo=cloudinary)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-A full-stack e-commerce web application for phones, laptops, and accessories built with Django. Features live Paystack payment processing, product reviews and ratings, wishlist, coupon/discount codes, real-time order tracking, and a powerful Django admin panel. Deployed on Render with Supabase PostgreSQL.
+A full-stack e-commerce web application for phones, laptops, and accessories built with Django. Features live Paystack payment processing, product reviews and ratings, wishlist, coupon/discount codes, real-time order tracking, persistent image storage via Cloudinary, and a customized Jazzmin admin panel. Deployed on Render with Supabase PostgreSQL.
 
-> **Live Demo:** [LIVE](https://django-shoptech.onrender.com) <
+> **Live Demo:** [https://django-shoptech.onrender.com](https://django-shoptech.onrender.com)
 
 ---
 
@@ -17,10 +18,10 @@ A full-stack e-commerce web application for phones, laptops, and accessories bui
 
 > **Homepage — Product Listing**
 ![Homepage](screenshots/homepage.png)
-> ![Homepage](screenshots/homepage-1.png)
+![Homepage](screenshots/homepage-1.png)
 
 > **Wishlist**
-![Product](screenshots/wishlist.png)
+![Wishlist](screenshots/wishlist.png)
 
 > **Shopping Cart**
 ![Cart](screenshots/cart.png)
@@ -28,15 +29,14 @@ A full-stack e-commerce web application for phones, laptops, and accessories bui
 > **Checkout with Coupon**
 ![Checkout](screenshots/checkout.png)
 
-> **Order History**
+> **Order History & Details**
 ![Orders](screenshots/orders.png)
-> ![Orders](screenshots/order-details-1.png)
-> [Orders](screenshots/order-details.png)
+![Order Details](screenshots/order-details-1.png)
+![Order Details](screenshots/order-details.png)
 
 > **Django Admin Panel**
 ![Admin](screenshots/admin.png)
-> ![Admin-stock](screenshots/stock.png)
-> 
+![Stock Warning](screenshots/stock.png)
 
 ---
 
@@ -44,7 +44,7 @@ A full-stack e-commerce web application for phones, laptops, and accessories bui
 
 ### Customers
 - Browse and search products across multiple categories
-- View product details with average ratings and customer reviews
+- View product details with average star ratings and customer reviews
 - Add products to shopping cart and manage quantities
 - Add products to wishlist for later
 - Apply coupon/discount codes at checkout
@@ -57,12 +57,14 @@ A full-stack e-commerce web application for phones, laptops, and accessories bui
 
 ### Admin
 - Full product management — add, edit, delete products with image uploads
+- **Persistent image storage via Cloudinary** — images never disappear on redeploy
 - **Low stock warning system** — color coded stock status (✅ In Stock / ⚠️ Low Stock / ❌ Out of Stock)
 - Manage product categories with auto-generated slugs
 - View and manage all customer orders with inline order items
 - Update order status directly from the orders list
 - Create and manage coupon/discount codes with expiry dates
 - Manage user accounts
+- Customized admin panel powered by **django-jazzmin**
 
 ---
 
@@ -78,9 +80,10 @@ A full-stack e-commerce web application for phones, laptops, and accessories bui
 | ORM | Django ORM |
 | Migrations | Django Migrations |
 | Payments | Paystack API |
+| Image Storage | Cloudinary |
 | Authentication | Django Built-in Auth + Custom User Model |
 | Forms | Django Forms |
-| Templating | Jinja2 / Django Templates |
+| Templating | Django Templates |
 | Frontend | HTML, CSS, Bootstrap 5 |
 | Image Processing | Pillow |
 | Static Files | WhiteNoise |
@@ -95,6 +98,7 @@ A full-stack e-commerce web application for phones, laptops, and accessories bui
 - Python 3.10+
 - Git
 - Paystack account (for payment keys)
+- Cloudinary account (for image storage)
 
 ### Installation
 
@@ -126,6 +130,9 @@ DEBUG=True
 DATABASE_URL=sqlite:///db.sqlite3
 PAYSTACK_SECRET_KEY=sk_test_xxxxxxxxxxxx
 PAYSTACK_PUBLIC_KEY=pk_test_xxxxxxxxxxxx
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
 ```
 
 ### Run Locally
@@ -156,7 +163,7 @@ Use Paystack test credentials:
 
 ## Deployment
 
-This app is deployed on **Render** with **Supabase PostgreSQL** as the production database.
+This app is deployed on **Render** with **Supabase PostgreSQL** as the production database and **Cloudinary** for persistent media storage.
 
 ### Environment Variables on Render
 
@@ -167,6 +174,9 @@ This app is deployed on **Render** with **Supabase PostgreSQL** as the productio
 | `DEBUG` | Set to `False` in production |
 | `PAYSTACK_SECRET_KEY` | Paystack secret key |
 | `PAYSTACK_PUBLIC_KEY` | Paystack public key |
+| `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name |
+| `CLOUDINARY_API_KEY` | Cloudinary API key |
+| `CLOUDINARY_API_SECRET` | Cloudinary API secret |
 | `DJANGO_SUPERUSER_USERNAME` | Admin username |
 | `DJANGO_SUPERUSER_EMAIL` | Admin email |
 | `DJANGO_SUPERUSER_PASSWORD` | Admin password |
@@ -174,12 +184,12 @@ This app is deployed on **Render** with **Supabase PostgreSQL** as the productio
 ### Start Command
 
 ```
-python manage.py migrate && python manage.py collectstatic --noinput && python manage.py createsuperuser --noinput || true && gunicorn shoptech.wsgi
+python manage.py migrate && python manage.py collectstatic --noinput && python manage.py createsuperuser --noinput 2>/dev/null; gunicorn ShopTech.wsgi
 ```
 
 ---
 
-# Order Status Flow
+## Order Status Flow
 
 ```
 Pending → Paid → Processing → Shipped → Delivered
@@ -191,9 +201,9 @@ Pending → Paid → Processing → Shipped → Delivered
 ## Key Django Features Used
 
 - **Custom User Model** — extended Django's built-in User with phone, address and role
-- **Django ORM** — complex queries, annotations and relationships without raw SQL
+- **Django ORM** — complex queries and relationships without raw SQL
 - **Built-in Auth** — secure authentication out of the box
-- **Auto Admin Panel** — fully functional CRUD interface from models
+- **Jazzmin Admin Panel** — customized, modern admin interface
 - **Slug URLs** — SEO-friendly URLs auto-generated from product names
 - **CSRF Protection** — built-in security on all forms
 - **Template Inheritance** — base template extended across all pages
@@ -206,6 +216,7 @@ Pending → Paid → Processing → Shipped → Delivered
 **Benjamin Tutu** — Python Backend Developer, Ghana
 
 - GitHub: [@BenjaminTutu](https://github.com/BenjaminTutu)
+- Live Demo: [https://django-shoptech.onrender.com](https://django-shoptech.onrender.com)
 - Open to: Part-time backend roles, freelance projects, and collaborations
 
 ---
