@@ -9,7 +9,7 @@
 
 A full-stack e-commerce web application for phones, laptops, and accessories built with Django. Features live Paystack payment processing, product reviews and ratings, wishlist, coupon/discount codes, real-time order tracking, and a powerful Django admin panel. Deployed on Render with Supabase PostgreSQL.
 
-> **Live Demo:** [Coming Soon](#) <!-- Replace with your Render URL -->
+> **Live Demo:** [LIVE](https://django-shoptech.onrender.com) <
 
 ---
 

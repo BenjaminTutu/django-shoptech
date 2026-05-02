@@ -1,1 +1,1 @@
-web: python manage.py migrate && python manage.py collectstatic --noinput && python manage.py createsuperuser --noinput || true && gunicorn shoptech.wsgi
+web: python manage.py migrate && python manage.py collectstatic --noinput --clear && python manage.py createsuperuser --noinput 2>/dev/null; gunicorn ShopTech.wsgi
