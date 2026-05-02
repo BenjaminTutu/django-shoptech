@@ -21,6 +21,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # CLOUDINARY APPS
+    'cloundinary_storage',
+    'cloundinary',
+
+    # MY APPS
     'accounts.apps.AccountsConfig',
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
@@ -80,6 +85,18 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
+
+
+
+# CLOUDINARY CONFIG
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET')
+}
+
+DEFAULT_FILE_STORAGE= 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
 
 # Static files
 STATIC_URL = '/static/'
