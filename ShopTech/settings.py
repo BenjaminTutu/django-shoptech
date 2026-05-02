@@ -22,8 +22,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # CLOUDINARY APPS
-    'cloundinary_storage',
-    'cloundinary',
+    'cloudinary_storage',
+    'cloudinary',
 
     # MY APPS
     'accounts.apps.AccountsConfig',
